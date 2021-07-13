@@ -15,21 +15,23 @@ const SWIPE_OUT_DURATION = 250;
 
 const Swipe = ({onSwipe, children}) => {
   const position = useRef(new Animated.ValueXY()).current;
-  const panResponder = new PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    onPanResponderMove: (event, gesture) => {
-      if (gesture.dx > 0) {
-        position.setValue({x: gesture.dx, y: 0});
-      }
-    },
-    onPanResponderRelease: (event, gesture) => {
-      if (gesture.dx > SWIPE_THRESHOLD) {
-        forceSwipeRight();
-      } else {
-        resetPosition();
-      }
-    },
-  });
+  const panResponder = useRef(
+    new PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onPanResponderMove: (event, gesture) => {
+        if (gesture.dx > 0) {
+          position.setValue({x: gesture.dx, y: 0});
+        }
+      },
+      onPanResponderRelease: (event, gesture) => {
+        if (gesture.dx > SWIPE_THRESHOLD) {
+          forceSwipeRight();
+        } else {
+          resetPosition();
+        }
+      },
+    }),
+  ).current;
 
   const [state, setState] = useState({
     panResponder,
